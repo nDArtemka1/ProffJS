@@ -23,6 +23,22 @@ class ProductList {
             block.insertAdjacentHTML("beforeend", item.render());
         }
     }
+
+    createTotal() {
+        const h2Total = document.createElement('h2');
+        h2Total.classList.add('total');
+        const productsC = document.querySelector('.products');
+        productsC.append(h2Total);
+        h2Total.innerHTML = `ИТОГО, общая стоимость товаров составляет: ${this.getSum()} руб.`;
+    }
+    getSum() {
+        let sum = 0;
+        for (let item of this.goods) {
+            sum += item.price;
+        }
+        return sum;
+    }
+
 }
 
 class ProductItem {
@@ -43,6 +59,36 @@ class ProductItem {
     }
 }
 
+
+class Basket {
+    addGood() {
+
+    }
+
+    removeGood() {
+
+    }
+
+    changeGood() {
+
+    }
+
+    render() {
+
+    }
+}
+
+class ElemBasket {
+    render() {
+
+    }
+}
+
+
+
+
 let list = new ProductList();
+list.createTotal();
+
 
 
