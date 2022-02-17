@@ -3,8 +3,8 @@ class ProductList {
     constructor(container = '.products') {
         this.container = container;
         this.goods = [];
-        this._fetchProducts(); // рекомендация, чтобы метод ыбл вызван в текущем классе
-        this.render(); // вывод товара на страницу
+        this._fetchProducts();
+        this.render();
     }
 
     _fetchProducts() {
