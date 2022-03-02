@@ -1,94 +1,116 @@
+const API = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
-class ProductList {
+class ProductsList {
     constructor(container = '.products') {
         this.container = container;
-        this.goods = [];
-        this._fetchProducts();
-        this.render();
+        this.goods = [];//массив товаров
+        this.allProducts = [];//массив объектов
+        this._getProducts()
+            .then(data => { //data - объект js
+                this.goods = [...data];
+                this.render()
+            });
     }
 
-    _fetchProducts() {
-        this.goods = [
-            { id: 1, title: 'Notebook', price: 2000, img: 'img/Notebook.jpg' },
-            { id: 2, title: 'Mouse', price: 20, img: 'img/Mouse.jpg' },
-            { id: 3, title: 'Keyboard', price: 200, img: 'img/Keyboard.jpg' },
-            { id: 4, title: 'Gamepad', price: 50, img: 'img/Gamepad.jpg' },
-        ];
+    _getProducts() {
+        return fetch(`${API}/catalogData.json`)
+            .then(result => result.json())
+            .catch(error => {
+                console.log(error);
+            })
     }
-
+    calcSum() {
+        return this.allProducts.reduce((accum, item) => accum += item.price, 0);
+    }
     render() {
         const block = document.querySelector(this.container);
         for (let product of this.goods) {
-            const item = new ProductItem(product);
-            block.insertAdjacentHTML("beforeend", item.render());
+            const productObj = new ProductItem(product);
+            this.allProducts.push(productObj);
+            block.insertAdjacentHTML('beforeend', productObj.render());
         }
-    }
 
-    createTotal() {
-        const h2Total = document.createElement('h2');
-        h2Total.classList.add('total');
-        const productsC = document.querySelector('.products');
-        productsC.append(h2Total);
-        h2Total.innerHTML = `ИТОГО, общая стоимость товаров составляет: ${this.getSum()} руб.`;
     }
-    getSum() {
-        let sum = 0;
-        for (let item of this.goods) {
-            sum += item.price;
-        }
-        return sum;
-    }
-
 }
+
 
 class ProductItem {
-    constructor(product) {
-        this.title = product.title;
-        this.id = product.id;
+    constructor(product, img = 'https://placehold.it/200x150') {
+        this.title = product.product_name;
         this.price = product.price;
-        this.img = product.img;
+        this.id = product.id_product;
+        this.img = img;
     }
-
     render() {
-        return `<div class="product-item">
-        <img src="${this.img}" alt="img">
-        <h3>${this.title}</h3>
-        <p>${this.price}</p>
-        <button class="buy-btn">Купить</button>
-    </div>`;
+        return `<div class="product-item" data-id="${this.id}">
+                <img src="${this.img}" alt="Some img">
+                <div class="desc">
+                    <h3>${this.title}</h3>
+                    <p>${this.price} $</p>
+                    <button class="buy-btn">Купить</button>
+                </div>
+            </div>`
     }
 }
+
+let list = new ProductsList();
+
 
 
 class Basket {
-    addGood() {
-
+    constructor(container = '.cart-block') {
+        this.container = container;
+        this.goods = [];
+        this._clickBasket();
+        this._getBasketItem()
+            .then(data => {
+                this.goods = [...data.contents];
+                this.render()
+            });
     }
-
-    removeGood() {
-
+    _clickBasket() {
+        document.querySelector(".btn-cart").addEventListener('click', () => {
+            document.querySelector(this.container).classList.toggle('invisible');
+        });
     }
-
-    changeGood() {
-
+    _getBasketItem() {
+        return fetch(`${API}/getBasket.json`)
+            .then(result => result.json())
+            .catch(error => {
+                console.loge(error);
+            })
     }
-
     render() {
+        const block = document.querySelector(this.container);
+        for (let product of this.goods) {
+            const productObj = new BasketItem();
 
+            block.insertAdjacentHTML('beforeend', productObj.render(product));
+        }
+    }
+
+}
+
+class BasketItem {
+    render(product) {
+        return `
+        <div class="cart-item" data-id="${product.id_product}">
+            <div class="product-bio">
+                <img src="${product.img}" alt="Img">
+                <div class="product=desc">
+                    <p class="product-title">${product.product_name}</p>
+                    <p class="product-quantity">Quantity:${product.quantity}</p>
+                    <p class="product-single-price">$${product.price} each</p>
+                </div>
+            </div>
+            <div class="right-block">
+                <p class="product-price">$${product.quantity * product.price}</p>
+                <button class="del-btn" data-id="${product.id_product}">&times;</button>
+            </div>
+        </div>`
     }
 }
 
-class ElemBasket {
-    render() {
-
-    }
-}
-
-
-
-
-let list = new ProductList();
-list.createTotal();
-
+let bask = new Basket();
 
 
