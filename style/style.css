@@ -20,7 +20,7 @@
       align-items: center;
   }
 
-  button:focus{s
+  button:focus{
     outline: none;
 }
 
@@ -199,4 +199,8 @@
   background-color: transparent;
   border: none;
   border-bottom: 2px solid #fafafa;
+}
+
+.svg-inline--fa {
+  cursor: pointer;
 }

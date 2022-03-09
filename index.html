@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Интернет-магазин</title>
+    <link rel="stylesheet" href="style/normalize.css">
     <link rel="stylesheet" href="style/style.css" type="text/css" />
 </head>
 
@@ -11,6 +12,12 @@
     <header class="container ">
         <h1 class="logo">TECH-SHOP</h1>
         <div class="cart">
+            <form action="#" class="search-form">
+                <input type="text" class="search-field">
+                <button class="btn-search" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
             <button class="btn-cart" type="button">Корзина</button>
             <div class="cart-block invisible"></div>
         </div>
@@ -20,6 +27,9 @@
         <div class="products"></div>
     </main>
     <script src="js/main.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"
+        integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>
